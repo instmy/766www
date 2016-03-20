@@ -1,0 +1,24 @@
+主要修改
+1.删除了do.php中意义不明的Mysql空连接
+2.取消mail-gun支持,改用smtp,请在config.php中自行设置
+3.修改找回密码操作来适配smtp发信
+4.增加了简单的支付系统,允许支付购买流量,模板位于user/buy.php,生成订单部分位于user/neworder.php,callback位于tools/callback.php,目前适配的是某支付宝监控辅助,callback.php以get方式接受三个参数:orderid、money和key,其中key用于检验是否为合法callback,支付后将自动升级为高级账户
+5.修改user/node.php以便仅限高级用户可以查看特殊节点,后台添加节点时节点类型输入0即为普通节点,1即为高级节点
+6.修改签到时间从22小时一次到24小时一次,且高级用户无法进行签到(因为懒得处理收费流量与免费流量)
+7.tools/cron.php改为用于将所有流量耗尽的高级用户重新设定为普通用户并赠送1G普通流量,这点可以在文件里修改
+8.增加是否需要邀请的选项,修改config.php中$user_need_invite的值即可更改站点是否需要邀请才能注册
+9.修改邀请码发布和注册页面,用户可以直接通过点击邀请码来注册了
+10.添加充值卡充值功能,后台添加生成充值卡页面
+11.修复注册用户可能产生的xss,修改了一处意义不明的过滤
+12.拒绝传入数组,提升安全性
+
+其他说明:
+如何设置高级节点并仅允许高级用户连接
+1.修改ssmanyuser目录下shadowsocks文件夹中的db_transfer.py 第81行
+将cur.execute里面的的sql语句后面加上WHERE plan = 'xxx'
+比如
+cur.execute("SELECT port, u, d, transfer_enable, passwd, switch, enable FROM user WHERE plan = 'pro'")
+2.如果节点上ss已经运行,清先停止服务,然后删除这个目录里的所有.pyc文件,再启动服务即可
+
+
+
